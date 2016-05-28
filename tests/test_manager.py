@@ -10,6 +10,7 @@ from amocrm.exceptions import (
     WrongStatusCode,
     NoCookieError,
     XmlReturnedFalse,
+    NotAnEntity,
 )
 from amocrm import Manager
 
@@ -92,3 +93,18 @@ class ManagerTest(BaseMockSettingsTest):
             self.get_response_xml(auth_string='true')
         )
         assert mock_post.called
+
+    def test_post_entity_wrong_input(self):
+        with self.assertRaises(NotAnEntity):
+            self.am.post_entity('string')
+
+
+    @skip
+    def test_post_entity(self):
+        entity = Lead(
+            name='beta lead from API',
+            status_id=PIPELINE_BETA
+        )
+        
+
+

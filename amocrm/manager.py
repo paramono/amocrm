@@ -1,6 +1,7 @@
 import json
 import pprint
 import requests
+from requests import Response
 import xml.etree.ElementTree as etree
 
 import amocrm.conf
@@ -10,6 +11,8 @@ from .exceptions import (
     WrongStatusCode,
     NoCookieError,
     XmlReturnedFalse,
+    NotAnEntity,
+    WrongValueType
 )
 from .fields import (
     Field, 
@@ -44,7 +47,7 @@ class Manager(object):
         # if AUTH_DATA is wrong, status_code will be 200,
         # but the returned xml will have <auth>false</auth>
         # r.raise_for_status()
-        if r.status_code != 200:
+        if r.status_code != requests.codes.ok:
             raise WrongStatusCode(
                 'Authentication error! Status code is %s ' 
                 'should be 200' % r.status_code
@@ -108,7 +111,11 @@ class Manager(object):
             'post',
             entity_name_plural,
         )
+
+        # safeguard: tries to auth if no cookies found
         cookies = getattr(self, 'cookies', None)
+        if not cookies:
+            self.auth()
 
         r = requests.post(
             url, 
@@ -116,7 +123,18 @@ class Manager(object):
             headers=HEADERS, 
             data=entity_json,
         )
-        r.raise_for_status()
+
+        if r.status_code != requests.codes.ok:
+            raise ResponseError(
+                'Failed to post an entity %s.\n'
+                'Response:\n%s\n'
+                '* * * * * * * * * *\n'
+                'Data posted:\n%s' % (
+                    entity_name,
+                    self.prettify(r.text),
+                    self.prettify(entity_json),
+                )
+            )
 
         entity_response_json = json.loads(r.text) 
         entity_returned = Hasher(entity_response_json)
@@ -128,56 +146,27 @@ class Manager(object):
             entity.id = None
         return r
 
-    def post_lead(self, entity):
-        if isinstance(entity, Lead):
-            json_data = entity.tojson()
+    def prettify(self, data):
+        if isinstance(data, Response):
+            data = data.text
+        elif isinstance(data, dict):
+            data = str(data)
 
-        r = requests.post(
-            amocrm.conf.settings.URL_POST_LEADS, 
-            cookies=self.cookies,
-            headers=HEADERS, 
-            data=json_data,
-            )
-        # getting entity id for response
-        # (required for linked leads)
-        entity_json = json.loads(r.text) 
-        entity_json = Hasher(entity_json)
-        try:
-            entity.id = int(
-                entity_json['response']['leads']['add'][0]['id']
-            )
-        except ValueError:
-            entity.id = None
-        return r
-
-    def post_contact(self, entity):
-        if isinstance(entity, Contact):
-            json_data = entity.tojson()
-
-        r = requests.post(
-            amocrm.conf.settings.URL_POST_CONTACTS, 
-            cookies=self.cookies,
-            headers=HEADERS, 
-            data=json_data,
+        if not isinstance(data, str):
+            raise WrongValueType(
+                'prettify accepts either str or Response objects'
+                'you supplied object of type %s' % type(data)
             )
 
-        # getting entity id for response
-        # (required for linked leads)
-        entity_json = json.loads(r.text) 
-        entity_json = Hasher(entity_json)
-        entity_id = entity_json['response']['contacts']['add'][0]['id']
-        entity.id = entity_id
-
-        return r
-
-    def pprint(self, response):
-        parsed = json.loads(response.text)
+        parsed = json.loads(data)
         pretty = json.dumps(
             parsed, 
             indent=4,
             ensure_ascii=False,
             sort_keys=True,
         )
-        print(pretty)
-        # pprint.pprint(parsed, indent=1)
+        return pretty
 
+    def pprint(self, data):
+        pretty = self.prettify(data)
+        print(pritty)

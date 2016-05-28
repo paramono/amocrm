@@ -6,7 +6,7 @@ class WrongValueType(AmocrmError): pass
 class ForbiddenValueKey(AmocrmError): pass
 class NotAnEntity(AmocrmError): pass
 
-class ResponseError(RuntimeError): pass
+class ResponseError(AmocrmError): pass
 class WrongStatusCode(ResponseError): pass
 class NoCookieError(ResponseError): pass
 class XmlReturnedFalse(ResponseError): pass
