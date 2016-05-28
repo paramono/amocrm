@@ -12,9 +12,6 @@ AMO_POSTFIX_POST_LEADS    = "/private/api/v2/json/leads/set"
 AMO_POSTFIX_POST_CONTACTS = "/private/api/v2/json/contacts/set"
 
 
-__all__ = ['amo_settings', 'AmoSettings']
-
-
 class AmoSettings(DictWrap):
 
     def __init__(self, **kwargs):
