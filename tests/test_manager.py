@@ -6,19 +6,17 @@ from unittest import skip
 from unittest.mock import patch, MagicMock
 
 import amocrm.conf
-from amocrm.manager import (
-    Manager,
-    AuthFailed,
+from amocrm.exceptions import (
     WrongStatusCode,
     NoCookieError,
     XmlReturnedFalse,
 )
+from amocrm import Manager
 
-from .base_settings import BaseTestWithSettings
-from .base_field_value import BaseTest
+from .base_mocksettings import BaseMockSettingsTest
 
 
-class ManagerTest(BaseTest):
+class ManagerTest(BaseMockSettingsTest):
 
     @classmethod
     def setUpClass(cls):

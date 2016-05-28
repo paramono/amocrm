@@ -4,19 +4,22 @@ import requests
 import xml.etree.ElementTree as etree
 
 import amocrm.conf
-from amocrm.models.field import (
+from .entities import Entity, Contact, Lead
+from .exceptions import (
+    ResponseError,
+    WrongStatusCode,
+    NoCookieError,
+    XmlReturnedFalse,
+)
+from .fields import (
     Field, 
     PhoneField,
     EmailField,
     NoteField,
     UrlField,
 )
-from amocrm.models.value import Value
-from amocrm.models.entities.entity import Entity
-from amocrm.models.entities.contact import Contact
-from amocrm.models.entities.lead import Lead
-from amocrm.util import Hasher
-from amocrm.exceptions import *
+from .values import Value
+from .util import Hasher
 
 
 HEADERS = {

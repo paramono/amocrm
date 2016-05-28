@@ -1,11 +1,12 @@
 from copy import deepcopy
 
-from amocrm.dictwrap import DictWrap
-from amocrm.exceptions import MissingArgument
-from amocrm.models.field import Field
-from amocrm.models.entities.entity import Entity
-from amocrm.models.entities.lead import Lead
-from amocrm.util import cast_to_cls_list
+from ..dictwrap import DictWrap
+from ..exceptions import MissingArgument
+from ..fields import Field
+from ..util import cast_to_cls_list
+
+from .entity import Entity
+from .lead import Lead
 
 
 class Contact(Entity):

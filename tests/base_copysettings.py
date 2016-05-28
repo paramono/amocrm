@@ -4,7 +4,7 @@ from unittest.mock import patch
 import amocrm.conf
 
 
-class BaseTestWithSettings(unittest.TestCase):
+class BaseCopySettings(unittest.TestCase):
 
     def setUp(self):
         self.conf = amocrm.conf.AmoSettings()

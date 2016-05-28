@@ -3,17 +3,17 @@ from unittest.mock import patch
 
 import amocrm.conf
 # from settings import AmoSettings, amo_settings
-from amocrm.models.field import (
+from amocrm.fields import (
     Field,
     PhoneField,
     EmailField,
     UrlField,
     NoteField,
 )
-from amocrm.models.value import Value
+from amocrm.values import Value
 
 
-class BaseTest(unittest.TestCase):
+class BaseMockSettingsTest(unittest.TestCase):
 
     def setUp(self):
         self.settings_patcher = patch('amocrm.conf.settings')

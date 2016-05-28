@@ -1,10 +1,11 @@
 from copy import deepcopy
 
-from amocrm.exceptions import MissingArgument
-from amocrm.dictwrap import DictWrap
-from amocrm.models.entities.entity import Entity
-from amocrm.models.field import Field
-from amocrm.util import cast_to_cls_list
+from ..exceptions import MissingArgument
+from ..dictwrap import DictWrap
+from ..fields import Field
+from ..util import cast_to_cls_list
+
+from .entity import Entity
 
 
 class Lead(Entity):

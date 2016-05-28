@@ -1,13 +1,13 @@
 import unittest
 
 from amocrm.exceptions import *
-from amocrm.models.value import Value
-from amocrm.models.field import Field
+from amocrm.values import Value
+from amocrm.fields import Field
 
-from .base_field_value import BaseTest
+from .base_mocksettings import BaseMockSettingsTest
 
 
-class TestField(BaseTest):
+class TestField(BaseMockSettingsTest):
     def setUp(self):
         super().setUp()
         self.cls = Field

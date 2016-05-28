@@ -1,5 +1,5 @@
-from amocrm.dictwrap import DictWrap
-from amocrm.exceptions import *
+from .dictwrap import DictWrap
+from .exceptions import MissingValue
 
 
 class Value(DictWrap):
@@ -11,4 +11,3 @@ class Value(DictWrap):
                 'AmoValue needs to have a "value" key in arguments'
             )
         self._dict = kwargs
-        # self.__dict__.update(**kwargs)

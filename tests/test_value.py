@@ -1,12 +1,12 @@
 import unittest
 
 from amocrm.exceptions import *
-from amocrm.models.value import Value
+from amocrm.values import Value
 
-from .base_field_value import BaseTest
+from .base_mocksettings import BaseMockSettingsTest
 
 
-class TestValue(BaseTest):
+class TestValue(BaseMockSettingsTest):
 
     def test_Value_builds_correct_dict(self):
         amovalue = self.amovalue_phone

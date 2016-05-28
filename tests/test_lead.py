@@ -3,12 +3,12 @@ from unittest import skip
 from unittest.mock import patch
 
 from amocrm.exceptions import *
-from amocrm.models.entities.lead import Lead
+from amocrm.entities import Lead
 
-from .base_field_value import BaseTest
+from .base_mocksettings import BaseMockSettingsTest
 
 
-class TestLead(BaseTest):
+class TestLead(BaseMockSettingsTest):
 
     def test_Lead_todict_returns_dict(self):
         amolead = Lead(

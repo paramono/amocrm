@@ -11,7 +11,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='amocrm',
-    version='0.7.0',
+    version='0.7.1',
     packages=['amocrm'],
     install_requires=['requests'],
     include_package_data=True,

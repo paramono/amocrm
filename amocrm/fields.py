@@ -1,13 +1,17 @@
 from copy import deepcopy
 
 import amocrm.conf
-from amocrm.dictwrap import DictWrap
-from amocrm.exceptions import *
-from amocrm.models.value import Value
-from amocrm.util import (
+from .dictwrap import DictWrap
+from .exceptions import (
+    MissingArgument,
+    EmptyArgument,
+    WrongValueType,
+)
+from .util import (
     cast_to_cls_list,
     is_list_of_class,
 )
+from .values import Value
 
 
 class Field(DictWrap):

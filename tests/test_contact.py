@@ -3,9 +3,9 @@ from unittest import skip
 from unittest.mock import patch
 
 from amocrm.exceptions import *
-from amocrm.models.entities.contact import Contact
-from amocrm.models.entities.lead import Lead
-from amocrm.models.field import (
+from amocrm.entities import Contact, Lead
+
+from amocrm.fields import (
     Field,
     PhoneField,
     EmailField,
@@ -13,10 +13,10 @@ from amocrm.models.field import (
     UrlField,
 )
 
-from .base_field_value import BaseTest
+from .base_mocksettings import BaseMockSettingsTest
 
 
-class TestContact(BaseTest):
+class TestContact(BaseMockSettingsTest):
 
     def test_Contact_todict_returns_dict(self):
         amovalue = self.amovalue_phone

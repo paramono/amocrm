@@ -4,10 +4,10 @@ from unittest.mock import patch
 
 import amocrm.conf
 
-from .base_settings import BaseTestWithSettings
+from .base_copysettings import BaseCopySettings
 
 
-class SettingsTest(BaseTestWithSettings):
+class SettingsTest(BaseCopySettings):
 
     def test_get_url(self):
 

@@ -1,7 +1,7 @@
 import unittest
 
 from amocrm.exceptions import *
-from amocrm.models.field import (
+from amocrm.fields import (
     Field,
     PhoneField,
     EmailField,
@@ -9,7 +9,6 @@ from amocrm.models.field import (
     UrlField,
 )
 
-from .base_field_value import BaseTest
 from .test_field import TestField
 
 
