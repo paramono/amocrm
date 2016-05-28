@@ -61,9 +61,11 @@ class Contact(Entity):
             })
 
         if self.linked_leads:
-            self._dict.update({
-                'linked_leads_id': [l.id for l in self.linked_leads if l.id]
-            })
+            linked_leads_with_ids = [l.id for l in self.linked_leads if l.id]
+            if linked_leads_with_ids:
+                self._dict.update({
+                    'linked_leads_id': linked_leads_with_ids
+                })
 
         d = {
             "request": {

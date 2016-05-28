@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from amocrm.exceptions import *
 from amocrm.models.entities.contact import Contact
+from amocrm.models.entities.lead import Lead
 from amocrm.models.field import (
     Field,
     PhoneField,
@@ -240,8 +241,75 @@ class TestContact(BaseTest):
             }
         })
 
-    def test_Contact_links_leads(self):
-        self.fail()
+    def test_Contact_links_leads_with_ids(self):
+        field = PhoneField(values='555 55 55')
+
+        amolead = Lead(
+            name=self.name,
+            status_id=123,
+        )
+        amolead.id = 1234
+
+        amocontact = Contact(
+            name=self.name,
+            fields=field,
+            linked_leads=amolead
+        )
+        d = amocontact.todict()
+
+        self.assertEqual(d, {
+            "request": {
+                "contacts": {
+                    "add": [{
+                        "name": self.name, 
+                        # "tags": user_tags, 
+                        "custom_fields": [field.todict()],
+                        # "tags": ', '.join(expected_result),
+                        # 'date_create': 1375105752, 
+                        # 'company_name': 'amocrm', 
+                        'linked_leads_id': [1234], 
+                        # 'responsible_user_id': 10720146, 
+                        # 'request_id': 1953, 
+                        # 'last_modified': 1375105752
+                    }]
+                }
+            }
+        })
+
+    def test_Contact_does_not_link_leads_without_ids(self):
+        field = PhoneField(values='555 55 55')
+
+        amolead = Lead(
+            name=self.name,
+            status_id=123,
+        )
+        amolead.id = None
+
+        amocontact = Contact(
+            name=self.name,
+            fields=field,
+            linked_leads=amolead
+        )
+        d = amocontact.todict()
+
+        self.assertEqual(d, {
+            "request": {
+                "contacts": {
+                    "add": [{
+                        "name": self.name, 
+                        # "tags": user_tags, 
+                        "custom_fields": [field.todict()],
+                        # "tags": ', '.join(expected_result),
+                        # 'date_create': 1375105752, 
+                        # 'company_name': 'amocrm', 
+                        # 'linked_leads_id': [1234], 
+                        # 'responsible_user_id': 10720146, 
+                        # 'request_id': 1953, 
+                        # 'last_modified': 1375105752
+                    }]
+                }
+            }
+        })
 
     def test_Contact_is_json_serializable(self):
         amovalue = self.amovalue_phone

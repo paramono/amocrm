@@ -13,6 +13,7 @@ setup(
     name='amocrm',
     version='0.7.0',
     packages=['amocrm'],
+    install_requires=['requests'],
     include_package_data=True,
     license='BSD License',  
     description='AmoCRM API wrapper in python',

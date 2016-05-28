@@ -26,13 +26,6 @@ HEADERS = {
 amo_settings = amocrm.conf.settings
 
 
-class ResponseError(RuntimeError):    pass
-class AuthFailed(ResponseError):      pass
-class WrongStatusCode(ResponseError): pass
-class NoCookieError(AuthFailed):      pass
-class XmlReturnedFalse(AuthFailed):   pass
-
-
 class Manager(object):
 
     def __init__(self):
