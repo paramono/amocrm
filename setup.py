@@ -11,11 +11,11 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='amocrm',
-    version='0.7.5',
+    version='0.7.7',
     packages=find_packages(exclude=['dirty', 'tests*']),
     install_requires=['requests'],
     include_package_data=True,
-    license='BSD License',  
+    license='BSD License',
     description='AmoCRM API wrapper in python',
     long_description=README,
     url='https://github.com/paramono/amocrm',
