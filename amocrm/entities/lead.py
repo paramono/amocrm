@@ -20,7 +20,7 @@ class Lead(Entity):
         self.name = name
         self.status_id = status_id
 
-    def todict(self):
+    def todict(self, verb='add', id_=None):
         self._dict = {
             "name": self.name,
             "status_id": self.status_id,

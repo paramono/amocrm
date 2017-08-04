@@ -6,10 +6,12 @@ from amocrm.dictwrap import DictWrap
 AMO_POSTFIX_GET_ACCOUNT   = "/private/api/v2/json/accounts/current"
 AMO_POSTFIX_GET_LEADS     = "/private/api/v2/json/leads/list"
 AMO_POSTFIX_GET_CONTACTS  = "/private/api/v2/json/contacts/list"
+AMO_POSTFIX_GET_CUSTOMERS = "/private/api/v2/json/customers/list"
 
 AMO_POSTFIX_POST_AUTH     = "/private/api/auth.php"
 AMO_POSTFIX_POST_LEADS    = "/private/api/v2/json/leads/set"
 AMO_POSTFIX_POST_CONTACTS = "/private/api/v2/json/contacts/set"
+AMO_POSTFIX_POST_CUSTOMERS = "/private/api/v2/json/customers/set"
 
 
 class AmoSettings(DictWrap):
@@ -19,14 +21,16 @@ class AmoSettings(DictWrap):
         self._dict = kwargs
         self.api_links = {
             'get': {
-                'account':  AMO_POSTFIX_GET_ACCOUNT,
-                'leads':    AMO_POSTFIX_GET_LEADS,
-                'contacts': AMO_POSTFIX_GET_CONTACTS,
+                'account':   AMO_POSTFIX_GET_ACCOUNT,
+                'leads':     AMO_POSTFIX_GET_LEADS,
+                'contacts':  AMO_POSTFIX_GET_CONTACTS,
+                'customers': AMO_POSTFIX_GET_CUSTOMERS,
             },
             'post': {
-                'auth':     AMO_POSTFIX_POST_AUTH,
-                'leads':    AMO_POSTFIX_POST_LEADS,
-                'contacts': AMO_POSTFIX_POST_CONTACTS,
+                'auth':      AMO_POSTFIX_POST_AUTH,
+                'leads':     AMO_POSTFIX_POST_LEADS,
+                'contacts':  AMO_POSTFIX_POST_CONTACTS,
+                'customers': AMO_POSTFIX_POST_CUSTOMERS,
             },
         }
 
@@ -55,7 +59,7 @@ class AmoSettings(DictWrap):
         return url
 
     def get_url(self, postfix):
-        if not self.USER_DOMAIN: 
+        if not self.USER_DOMAIN:
             raise AttributeError(
                 'USER_DOMAIN must be specified for amocrm settings'
             )
@@ -69,4 +73,5 @@ class AmoSettings(DictWrap):
             "type":       "json",
         }
         
+
 settings = AmoSettings()

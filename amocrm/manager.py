@@ -5,7 +5,7 @@ from requests import Response
 import xml.etree.ElementTree as etree
 
 import amocrm.conf
-from .entities import Entity, Contact, Lead
+from .entities import Entity, Contact, Lead, Customer
 from .exceptions import (
     ResponseError,
     WrongStatusCode,
@@ -41,7 +41,10 @@ class Manager(object):
         r = requests.post(
             amocrm.conf.settings.URL_POST_AUTH,
             data=amocrm.conf.settings.AUTH_DATA,
-            )
+        )
+
+        print('Posting to: %s' % amocrm.conf.settings.URL_POST_AUTH)
+        print('POST data: %s' % amocrm.conf.settings.AUTH_DATA)
 
         # raises 404 on wrong URL_POST_AUTH
         # if AUTH_DATA is wrong, status_code will be 200,
@@ -50,7 +53,7 @@ class Manager(object):
         if r.status_code != requests.codes.ok:
             raise WrongStatusCode(
                 'Authentication error! Status code is %s ' 
-                'should be 200' % r.status_code
+                'should be 200.\nAmocrm outputs:\n%s' % (r.status_code, r.text,)
             )
 
         self.cookies = r.cookies # auth cookie
@@ -85,24 +88,37 @@ class Manager(object):
         r.raise_for_status()
         return r
 
-    def get_contacts(self):
+    def get_contacts(self, query=None):
+        data = {}
+        if query:
+            data.update({'query': query})
+
         r = requests.get(
             amo_settings.URL_GET_CONTACTS,
+            cookies=self.cookies,
+            headers=HEADERS,
+            params=data,
+        )
+        r.raise_for_status()
+        return r
+
+    def get_customers(self):
+        r = requests.get(
+            amo_settings.URL_GET_CUSTOMERS,
             cookies=self.cookies,
             headers=HEADERS,
             )
         r.raise_for_status()
         return r
 
-    def post_entity(self, entity):
+    def post_entity(self, entity, verb='add', id_=None):
         if isinstance(entity, Entity):
-            entity_json = entity.tojson()
+            entity_json = entity.tojson(verb=verb, id_=id_)
         else:
             raise NotAnEntity(
                 'You supplied object of %s, '
                 'expected Entity instead' % type(entity)
             )
-
 
         entity_name = entity.__class__.__name__.lower()
         entity_name_plural = entity_name + 's'
@@ -118,9 +134,9 @@ class Manager(object):
             self.auth()
 
         r = requests.post(
-            url, 
+            url,
             cookies=cookies,
-            headers=HEADERS, 
+            headers=HEADERS,
             data=entity_json,
         )
 
@@ -136,12 +152,20 @@ class Manager(object):
                 )
             )
 
-        entity_response_json = json.loads(r.text) 
+        entity_response_json = json.loads(r.text)
         entity_returned = Hasher(entity_response_json)
         try:
-            entity.id = int(
-                entity_returned['response'][entity_name_plural]['add'][0]['id']
-            )
+            if isinstance(entity, Customer):
+                # why, AmoCRM, why?!
+                entity.id = int(
+                    entity_returned['response'][entity_name_plural][
+                        verb][entity_name_plural][0]['id']
+                )
+            else:
+                entity.id = int(
+                    entity_returned['response'][entity_name_plural][
+                        verb][0]['id']
+                )
         except ValueError:
             entity.id = None
         return r

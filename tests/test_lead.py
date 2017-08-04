@@ -2,7 +2,7 @@ import unittest
 from unittest import skip
 from unittest.mock import patch
 
-from amocrm.exceptions import *
+from amocrm.exceptions import MissingArgument
 from amocrm.entities import Lead
 
 from .base_mocksettings import BaseMockSettingsTest
@@ -21,15 +21,11 @@ class TestLead(BaseMockSettingsTest):
 
     def test_Lead_raises_on_empty_name(self):
         with self.assertRaises(MissingArgument):
-            amolead = Lead(
-                status_id=123,
-            )
+            Lead(status_id=123)
 
     def test_Lead_raises_on_empty_status_id(self):
         with self.assertRaises(MissingArgument):
-            amolead = Lead(
-                name=self.name,
-            )
+            Lead(name=self.name)
 
     def test_Lead_builds_correct_dict(self):
         name = 'Vasya'
@@ -72,8 +68,6 @@ class TestLead(BaseMockSettingsTest):
         )
 
         try:
-            s = str(amolead)
+            str(amolead)
         except TypeError as e:
             self.fail('Lead is not JSON serializable!')
-
-

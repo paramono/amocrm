@@ -11,8 +11,8 @@ class DictWrap:
     def todict(self):
         return deepcopy(self._dict)
 
-    def tojson(self):
-        return json.dumps(self.todict())
+    def tojson(self, verb='add', id_=None):
+        return json.dumps(self.todict(verb=verb, id_=id_))
 
     def __setitem__(self, key, value):
         self._dict[key] = value
